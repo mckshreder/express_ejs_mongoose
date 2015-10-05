@@ -12,13 +12,6 @@ var mongoose = require('mongoose');
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
-// index page
-// app.get('/', function(req, res) {
-//     res.render('pages/index.ejs');
-// });
-
-
-
 //use db connection sting based on whether the environment is development or production
 switch(app.get('env')){
     case 'development':
