@@ -14,9 +14,13 @@ usersController.get('/', function ( req, res ) {
 usersController.get('/new', function ( req, res ) {
     res.render('pages/new.ejs');
 });
-usersController.post('/create', function ( req, res ) {
-    
-    User.createAsync({email: req.body.email, name: req.body.name}).then(function() {
+//define the create users route
+usersController.post('/create', function ( req, res) {
+
+    var user = new User({ email: req.body.email, password: req.body.password });
+    user.saveAsync()
+    .then(function() {
+         console.log("returning inside of save");
         res.redirect(303,'/');
     })
     .catch(function(err){
@@ -24,6 +28,25 @@ usersController.post('/create', function ( req, res ) {
         res.redirect(303,'/new')
     });
 });
+
+//this will return a login page
+usersController.get('/login', function ( req, res ) {
+    res.render('pages/login.ejs');
+});
+
+//this route will handle logging in a user
+usersController.post('/login', function ( req, res) {
+
+    User.findOneAsync({email: req.body.email})
+    .then(function(user) {
+
+       user.comparePasswordAsync(req.body.password).then(function (isMatch) {
+                console.log("match: " + isMatch);
+           res.redirect(303,'/');
+       })
+    });
+});
+
 usersController.get('/show/:id',function (req,res){
 
     User.findByIdAsync(req.params.id).then(function(user){

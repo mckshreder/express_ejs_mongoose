@@ -9,6 +9,7 @@
   "author": "Garrett McKenzie",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^0.8.5",
     "bluebird": "^2.10.2",
     "body-parser": "^1.14.1",
     "ejs": "^1.0.0",
