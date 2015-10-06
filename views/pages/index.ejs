@@ -4,6 +4,8 @@
 <tr>
     <td>User<%= i+1 %>&nbsp;</td>
     <td><%= users[i].email %></td>
+    <td><%= users[i].name %></td>
+    <td><a href="/show/<%= users[i].id %>">Posts</a></td>
 </tr>
 <% } %>
 </tbody>

@@ -5,12 +5,19 @@
 module.exports = require('./node_modules/express/lib/express');
 var express = require('express');
 var app = express();
-var routes  = require( './routes' );
+var routes  = require( './controllers' );
+var usersController = require('./controllers/users.js');
 var dbConfig = require('./db/credentials.js');
-var mongoose = require('mongoose');
+var Promise = require('bluebird');
+var mongoose = Promise.promisifyAll(require('mongoose'));
+
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
+//include body parser
+app.use( require('./node_modules/body-parser').urlencoded({ extended: true }));
+
+app.use('/', usersController);
 
 //use db connection sting based on whether the environment is development or production
 switch(app.get('env')){
@@ -27,7 +34,7 @@ switch(app.get('env')){
 require('./db/seed.js').seedUsers();
 
 //render our home index route
-app.get( '/', routes.index );
+// app.get( '/', routes.index );
 
 app.listen(8080);
 console.log('server starting...go to localhost:8080');

@@ -3,7 +3,7 @@
   to an object we can reuse
 */
 var mongoose = require('mongoose');
-
+// var Schema = mongoose.Schema;
 /*
    we use the mongoose 'Schema' method to
    build a schema that will define our user
@@ -11,10 +11,8 @@ var mongoose = require('mongoose');
 */
 var userSchema = mongoose.Schema({
     email: String,
-    hashed_password: String
-
+    name: String
 });
-
 /*
   here we explicitly create the 'User' model using our
   schema, we then must export it, so when user.js is
