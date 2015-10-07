@@ -4,23 +4,40 @@ var User = require('../models/user.js');
 // index route will display all Users
 usersController.get('/', function ( req, res ) {
 
-    User.findAsync({}).then( function(users){
-           res.render('pages/index.ejs', {
-            users: users
-           });
-    }).catch();
+    if(req.session && req.session.email){
+
+        User.findOne({ email: req.session.email }).then(function(user){
+            res.render('pages/index.ejs',{
+                curr_user: user.email,
+                users: null
+            });
+        })
+    }
+    else{
+        User.findAsync({})
+            .then( function(users){
+                res.render('pages/index.ejs', {
+                    curr_user: null,
+                    users: users
+                });
+            })
+            .catch();
+    }
 });
+
 //route that will return a Register User form
 usersController.get('/new', function ( req, res ) {
+
     res.render('pages/new.ejs');
 });
+
 //define the create users route
 usersController.post('/create', function ( req, res) {
 
     var user = new User({ email: req.body.email, password: req.body.password });
     user.saveAsync()
     .then(function() {
-         console.log("returning inside of save");
+         req.session.email = user.email;
         res.redirect(303,'/');
     })
     .catch(function(err){
@@ -29,10 +46,12 @@ usersController.post('/create', function ( req, res) {
     });
 });
 
+
 //this will return a login page
 usersController.get('/login', function ( req, res ) {
     res.render('pages/login.ejs');
 });
+
 
 //this route will handle logging in a user
 usersController.post('/login', function ( req, res) {
@@ -41,11 +60,12 @@ usersController.post('/login', function ( req, res) {
     .then(function(user) {
 
        user.comparePasswordAsync(req.body.password).then(function (isMatch) {
-                console.log("match: " + isMatch);
-           res.redirect(303,'/');
+          req.session.email = user.email;
+          res.redirect(303,'/');
        })
     });
 });
+
 
 usersController.get('/show/:id',function (req,res){
 

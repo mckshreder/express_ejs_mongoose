@@ -3,7 +3,6 @@
   and so is assigned to 'var User' below)
 */
 var User = require('../models/user.js');
-
 /*
   what we export below is a function, which we will call in
   our app.js file to actually seed the database
@@ -17,8 +16,8 @@ exports.seedUsers = function seedUsers() {
     */
     User.find({}).exec(function (err, collection) {
         if (collection.length === 0) {
-            User.create({ email: 'test@test.com', name: 'sfsd0745sf34fewf43frf' })
-            User.create({ email: 'test2@test.com', name: 'jokhjp8hlk7t7glkeqr23'});
+            User.create({ email: 'test@test.com', password: 'sfsd0745sf34fewf43frf' })
+            User.create({ email: 'test2@test.com', password: 'jokhjp8hlk7t7glkeqr23'});
         }
     });
 };
